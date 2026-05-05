@@ -121,3 +121,8 @@ body {
 .toast.show {
   opacity: 1;
 }
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
