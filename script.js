@@ -46,3 +46,17 @@ function showToast(msg) {
     toast.classList.remove("show");
   }, 2000);
 }
+
+const upload = document.getElementById("upload");
+const preview = document.getElementById("preview");
+const text = document.getElementById("uploadText");
+
+upload.addEventListener("change", function () {
+  const file = this.files[0];
+
+  if (file) {
+    preview.style.display = "block";
+    preview.src = URL.createObjectURL(file);
+    text.innerText = "Bukti berhasil dipilih";
+  }
+});
