@@ -92,6 +92,30 @@ body {
   border: 1px solid rgba(255,193,7,0.2);
 }
 
+.upload-box {
+  display: block;
+  background: rgba(255,255,255,0.05);
+  border: 2px dashed rgba(255,255,255,0.2);
+  padding: 20px;
+  border-radius: 14px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.upload-box:hover {
+  border-color: #ff7a00;
+  background: rgba(255,122,0,0.08);
+}
+
+.preview-img {
+  margin-top: 12px;
+  width: 100%;
+  border-radius: 12px;
+  display: none;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+}
+
 /* LINK */
 a {
   text-decoration: none;
