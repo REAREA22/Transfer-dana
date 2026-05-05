@@ -48,6 +48,21 @@
         <span class="copy" onclick="copy('1500415')">Salin</span>
       </div>
     </div>
+
+    <!-- Upload Bukti -->
+<div class="section">
+  <div style="font-weight:600; margin-bottom:8px;">
+    Upload Bukti Transaksi
+  </div>
+
+  <label for="upload" class="upload-box">
+    <span id="uploadText">Klik untuk upload bukti</span>
+  </label>
+
+  <input type="file" id="upload" hidden>
+
+  <img id="preview" class="preview-img" />
+</div>
     
 
     <!-- Note -->
@@ -59,18 +74,6 @@
   </div>
 </div>
 
-  <div class="section">
-  <div style="font-weight:600; margin-bottom:8px;">
-    Upload Bukti Transaksi
-  </div>
-
-  <label class="upload-box">
-    <input type="file" id="upload" hidden>
-    <span id="uploadText">Klik untuk upload bukti</span>
-  </label>
-
-  <img id="preview" class="preview-img" />
-</div>
 
 <!-- Toast -->
 <div id="toast" class="toast"></div>
