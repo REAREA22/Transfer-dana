@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transfer</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+  <div class="card">
+
+    <!-- Header -->
+    <div class="header">
+      <span>Transfer sebelum 5 Mei 2026, 16:40 WIB</span>
+      <span class="timer" id="timer">00:00:00</span>
+    </div>
+
+    <!-- Bank -->
+    <div class="section">
+      <div class="bank">
+        <div class="bank-logo">BRI</div>
+        <div>
+          <div style="font-weight:600;">Bank BRI</div>
+          <div style="font-size:13px; color:#555;">
+            FLIPTECH LENTERA INSPIRASI PERTIWI
+          </div>
+        </div>
+      </div>
+
+      <div class="box">
+        <span>067201000360306</span>
+        <span class="copy" onclick="copy('067201000360306')">Salin</span>
+      </div>
+    </div>
+
+    <!-- Nominal -->
+    <div class="section">
+      <div style="font-size:14px; margin-bottom:6px;">Jumlah Transfer</div>
+      <div class="box">
+        <span>Rp1.500.415</span>
+        <span class="copy" onclick="copy('1500415')">Salin</span>
+      </div>
+    </div>
+
+    <!-- Note -->
+    <div class="note">
+      <b>Pastikan jumlah transfernya sama ya</b><br>
+      Kode unik akan dikembalikan ke saldo kamu.
+    </div>
+
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast"></div>
+
+<!-- JS -->
+<script src="script.js"></script>
+
+</body>
+</html>
