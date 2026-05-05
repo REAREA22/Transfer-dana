@@ -1,17 +1,117 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DANA Clone</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DANA Flow</title>
 
-  <link rel="stylesheet" href="style.css">
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #118acb;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* CONTAINER */
+.container {
+  width: 100%;
+  max-width: 360px;
+}
+
+/* LOGO */
+.logo {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+/* SCREEN */
+.screen {
+  display: none;
+}
+.screen.active {
+  display: block;
+}
+
+/* CARD */
+.card {
+  background: white;
+  color: black;
+  padding: 15px;
+  border-radius: 12px;
+}
+.card label {
+  display: block;
+  margin: 10px 0;
+}
+
+/* BUTTON */
+.btn {
+  width: 100%;
+  padding: 14px;
+  margin-top: 20px;
+  background: #1c8ed9;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.btn:disabled {
+  opacity: 0.5;
+}
+
+/* INPUT */
+.input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+}
+
+/* PIN BOX */
+.pin {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+.pin input {
+  width: 45px;
+  height: 45px;
+  text-align: center;
+  font-size: 20px;
+  border-radius: 8px;
+  border: none;
+}
+
+/* POPUP OTP */
+.popup {
+  position: fixed;
+  bottom: -100%;
+  left: 0;
+  width: 100%;
+  background: white;
+  color: black;
+  text-align: center;
+  padding: 20px;
+  border-radius: 20px 20px 0 0;
+  transition: 0.3s;
+}
+.popup.active {
+  bottom: 0;
+}
+</style>
+
 </head>
 <body>
 
 <div class="container">
 
-  <!-- LOGO -->
   <div class="logo">DANA</div>
 
   <!-- SCREEN 1 -->
@@ -21,13 +121,13 @@
       <label><input type="radio"> Aktifkan Dana Cicil</label>
       <label><input type="radio"> Laporkan Kendala</label>
     </div>
-    <button onclick="nextScreen(2)" class="btn">Konfirmasi</button>
+    <button id="btn1" class="btn">Konfirmasi</button>
   </div>
 
   <!-- SCREEN 2 -->
   <div class="screen" id="screen2">
-    <input id="phone" type="text" placeholder="+62 812xxxx" class="input">
-    <button id="btnNext" class="btn" disabled>Lanjut</button>
+    <input id="phone" class="input" placeholder="+62 812xxxx">
+    <button id="btn2" class="btn" disabled>Lanjut</button>
   </div>
 
   <!-- SCREEN 3 -->
@@ -36,12 +136,12 @@
       <input maxlength="1"><input maxlength="1"><input maxlength="1">
       <input maxlength="1"><input maxlength="1"><input maxlength="1">
     </div>
-    <button id="btnPin" class="btn" disabled>Verifikasi</button>
+    <button id="btn3" class="btn" disabled>Verifikasi</button>
   </div>
 
 </div>
 
-<!-- OTP POPUP -->
+<!-- OTP -->
 <div class="popup" id="popup">
   <h3>Verifikasi OTP</h3>
   <div class="pin" id="otp">
@@ -50,6 +150,86 @@
   <p id="timer">Kirim ulang (60s)</p>
 </div>
 
-<script src="script.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  function showScreen(n) {
+    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+    document.getElementById("screen" + n).classList.add("active");
+  }
+
+  // SCREEN 1 → 2
+  document.getElementById("btn1").addEventListener("click", () => {
+    showScreen(2);
+  });
+
+  // VALIDASI NOMOR
+  const phone = document.getElementById("phone");
+  const btn2 = document.getElementById("btn2");
+
+  phone.addEventListener("input", () => {
+    let val = phone.value.replace(/[^0-9]/g, "");
+    if (!val.startsWith("62")) val = "62" + val;
+
+    phone.value = "+" + val;
+    btn2.disabled = val.length < 10;
+  });
+
+  // SCREEN 2 → 3
+  btn2.addEventListener("click", () => {
+    showScreen(3);
+  });
+
+  // PIN INPUT
+  const pinInputs = document.querySelectorAll("#pin input");
+  const btn3 = document.getElementById("btn3");
+
+  pinInputs.forEach((input, i) => {
+    input.addEventListener("input", () => {
+      if (input.value && i < pinInputs.length - 1) {
+        pinInputs[i + 1].focus();
+      }
+      checkPin();
+    });
+
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Backspace" && !input.value && i > 0) {
+        pinInputs[i - 1].focus();
+      }
+    });
+  });
+
+  function checkPin() {
+    btn3.disabled = [...pinInputs].some(i => i.value === "");
+  }
+
+  // PIN → OTP
+  btn3.addEventListener("click", () => {
+    document.getElementById("popup").classList.add("active");
+  });
+
+  // OTP INPUT
+  const otpInputs = document.querySelectorAll("#otp input");
+
+  otpInputs.forEach((input, i) => {
+    input.addEventListener("input", () => {
+      if (input.value && i < otpInputs.length - 1) {
+        otpInputs[i + 1].focus();
+      }
+    });
+  });
+
+  // TIMER
+  let time = 60;
+  setInterval(() => {
+    if (time > 0) {
+      time--;
+      document.getElementById("timer").innerText = `Kirim ulang (${time}s)`;
+    }
+  }, 1000);
+
+});
+</script>
+
 </body>
 </html>
